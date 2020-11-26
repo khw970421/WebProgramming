@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>로컬 스토리지에 StorageEvent</title>
+<style>
+form{
+   padding-bottom: 20px
+}
+</style>
+</head>
+<body>
+<h1> 나의 단어장 만들기</h1>
+<hr>
+<form>
+   <label> 영어 <input type='text' id = 'eng'></label>
+   <label> 한글 <input type='text' id = 'kor'></label>
+</form>
+
+<button id='save'>단어 저장</button>
+<button id='search'>영단어 검색</button>
+<button id='del'>단어 삭제</button>
+<button id='look_all'>전체 보기</button>
+<script>
+
+let eng = document.getElementById('eng');
+let kor = document.getElementById('kor');
+let save = document.getElementById('save');
+let search = document.getElementById('search');
+let del = document.getElementById('del');
+let look_all = document.getElementById('look_all');
+
+let exist = false,count_search=0,count_del=0;    //제약조건 걸기
+
+save.addEventListener('click',function(){
+   for(let i=0;i<localStorage.length;i++)
+   {
+      if(localStorage.key(i)==eng.value)        //이미 존재한다면 값을 알린다.
+      {
+         confirm('이미 존재하는 값');
+         exist = true;
+      }
+   }
+   if(exist==false){
+   localStorage.setItem(eng.value,kor.value);      //이미 존재하면 다시 값을 추가하지않는다.
+   }
+   exist=false;
+})
+
+search.addEventListener('click',function(){
+   for(let i=0;i<localStorage.length;i++)
+   {
+      if(localStorage.key(i)==eng.value)
+      {
+         confirm(`${localStorage.getItem(localStorage.key(i))}입니다.`)    //맞는 영어단어가 있으면 한글을 찾아준다.
+         break;
+      }
+      count_search++;
+   }
+   if(count_search==localStorage.length){           // 단어가 없을 경우 localStorage크기만큼 count가 같으므로 alert실행
+      alert('단어가 없어')
+   }
+   count_search=0;
+})
+
+del.addEventListener('click',function(){
+   for(let i=0;i<localStorage.length;i++)
+   {
+      if(localStorage.key(i)==eng.value)              //원하는 값이 있으면 삭제
+      {  
+         localStorage.removeItem(localStorage.key(i));
+         break;
+      }
+      count_del++;
+   }
+   if(count_del==localStorage.length){           // 단어가 없을 경우 localStorage크기만큼 count가 같으므로 alert실행
+      alert('삭제 할 단어가 없어')
+   }
+   count_del=0;
+})
+
+look_all.addEventListener('click',function(){      //클릭시 새로운 윈도우 open
+   window.open('http://khw970421.dothome.co.kr/voca/vocabulary_result.html')
+})
+
+
+
+</script>
+</body>
+</html>
