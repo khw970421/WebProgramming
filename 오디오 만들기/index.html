@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+    </style>
+</head>
+<body>
+<h1> 오디오 리스트 연속 재생</h1>
+<hr>
+<h2> 처음 play 버튼을 누르면 리스트에 있는 곡이 연속하여 자동 재생 됩니다. 마우스로 다른 곡을 선택하면 곡이 바뀝니다. next 버튼을 누르면 다음 곡으로 넘어갑니다.</h2>
+<hr>
+<audio class='audio' src='lastsummer.mp3' autoplay controls></audio>
+<hr>
+<select id='audio' size='3'>
+    <option value='lastsummer.mp3'>lastsummer</option>
+    <option value='paradise.wav'>paradise</option>
+    <option value='island.mp3'>island</option>
+</select>
+<button id='play'>play</button>
+<button id='next'>next</button>
+
+<p id='name'> 현재 연주되는 곡면이 보입니다. </p>
+
+<script>
+    let audio = document.querySelector('.audio');
+    let play = document.getElementById('play');
+    let next = document.getElementById('next');
+    let select = document.getElementById('audio');
+    let name = document.getElementById('name');
+
+    let num = 0;
+    let src = ['lastsummer.mp3', 'paradise.wav', 'island.mp3'];	//곡 이름 순서대로 저장
+
+    play.addEventListener('click', play_click);	//play 버튼 클릭시 실행
+    next.addEventListener('click', next_click);	//next 버튼 클릭시 실행
+    audio.addEventListener('ended', nextPlay); 	//곡이 끝날때 실행
+
+    function play_click() {
+        audio.pause();											//기존 진행 된 곡 정지
+        if (select.options[select.selectedIndex] == undefined)		//선택을 하지 않았을때의 play 경우
+        {
+            audio.play();										//기존 처음 음악 실행
+            name.innerHTML = src[0] + '재생중'					//실행 파일 출력
+        } else {													//새로운 곡 선택 후 play 경우
+            audio.src = select.options[(select.selectedIndex) % 3].value;	//해당 값을 src에 변경
+            audio.play();												//해당 곡 실행
+            name.innerHTML = select.options[(select.selectedIndex) % 3].value + '재생중'	// 실행 파일 출력
+        }
+    }
+
+    function next_click() {
+        if (select.options[select.selectedIndex] == undefined) 	// 선택을 하지않고 눌렀다면 오류 언급
+            alert('원하는 곡을 선택 후 클릭하세요')
+        else {																		//선택을 하고 눌렀다면 해당 선택한 것의 다음 노래를 가져와서 play한다.
+            audio.src = select.options[(select.selectedIndex + 1) % 3].value;
+            audio.play();
+            name.innerHTML = select.options[(select.selectedIndex + 1) % 3].value + '재생중'
+        }
+    }
+
+    function nextPlay() {
+        num = (num + 1) % 3			// 곡이 끝나고 num의 값을 증가 시킨 후 해당 배열의 값으로 src를 변경시킨다. (다음 곡 연주를 위해서)
+        audio.src = src[num];
+    }
+
+</script>
+</body>
+</html>

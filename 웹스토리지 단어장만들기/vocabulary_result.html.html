@@ -1,0 +1,30 @@
+<!DOCTYPE html>	
+<html>
+<meta charset="UTF-8">
+
+<style>
+li{
+	font-size:2em;
+}
+</style>
+
+<body onload='load()'>
+	<h1>나의 단어장 만들기</h1>
+	<hr>
+	<ul id='ul'></ul>
+
+<script>
+	let ul = document.querySelector('#ul')
+
+	function load()
+	{
+		for(let i=0;i<localStorage.length;i++)
+		{
+		let li = document.createElement('li');
+   		li.append(`${localStorage.key(i)} ${localStorage.getItem(localStorage.key(i))}`)
+   		ul.append(li);
+ 	  	}
+	}
+</script>
+   </body>
+</html>
